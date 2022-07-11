@@ -1,0 +1,6 @@
+name: ThreeLives
+version: '${project.version}'
+main: de.cooperr.threelives.ThreeLives
+api-version: 1.19
+authors: [ Cooperr06 ]
+description: Three Lives Plugin for our 3rd Minecraft Server
