@@ -16,7 +16,7 @@ public class PlaytimeManager {
     
     public void startPlayerTimer(Player player) {
         
-        var timer = new Timer(plugin);
+        var timer = playerTimers.get(player) == null ? new Timer(plugin) : playerTimers.get(player);
         
         timer.start();
         playerTimers.put(player, timer);

@@ -24,15 +24,21 @@ public final class ThreeLives extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        initConfig();
         init();
         
         listenerRegistration();
         commandRegistration();
+        scoreboardSetup();
     }
     
     @Override
     public void onDisable() {
+    }
+    
+    private void init() {
+        initConfig();
+        
+        playtimeManager = new PlaytimeManager(this);
     }
     
     private void initConfig() {
@@ -41,10 +47,6 @@ public final class ThreeLives extends JavaPlugin {
         if (getConfig().getConfigurationSection("players") == null) {
             getConfig().createSection("players");
         }
-    }
-    
-    private void init() {
-        playtimeManager = new PlaytimeManager(this);
     }
     
     private void listenerRegistration() {
@@ -56,16 +58,20 @@ public final class ThreeLives extends JavaPlugin {
     private void commandRegistration() {
     }
     
-    private void teamRegistration() {
+    private void scoreboardSetup() {
         
         var scoreboard = getServer().getScoreboardManager().getMainScoreboard();
+        
+        if (scoreboard.getTeams().stream().anyMatch(team -> team.getName().contains("life")) &&
+            scoreboard.getTeams().size() == 4 &&
+            scoreboard.getObjective("deaths") != null) {
+            return;
+        }
         
         var highlifeTeam = scoreboard.registerNewTeam("highlife");      // 0
         var midlifeTeam = scoreboard.registerNewTeam("midlife");        // 1
         var lowlifeTeam = scoreboard.registerNewTeam("lowlife");        // 2
         var spectatorTeam = scoreboard.registerNewTeam("spectator");    // 3
-        
-        scoreboard.registerNewObjective("deaths", "dummy", Component.text("deaths"));
         
         highlifeTeam.color(NamedTextColor.GREEN);
         midlifeTeam.color(NamedTextColor.YELLOW);
@@ -73,6 +79,8 @@ public final class ThreeLives extends JavaPlugin {
         spectatorTeam.color(NamedTextColor.GRAY);
         
         Collections.addAll(teams, highlifeTeam, midlifeTeam, lowlifeTeam, spectatorTeam);
+    
+        scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
     }
     
     public void registerListener(Listener listener) {

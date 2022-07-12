@@ -20,5 +20,7 @@ public class Timer {
     
     public void stop() {
         plugin.getServer().getScheduler().cancelTask(taskId);
+        time = 0;
+        taskId = 0;
     }
 }
