@@ -23,23 +23,12 @@ public class PlayerDeathListener implements Listener {
         var playerSection = plugin.getConfig().getConfigurationSection("players." + player.getUniqueId());
         assert playerSection != null;
         
-        var playerTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getPlayerTeam(player);
-        assert playerTeam != null;
-        var playerTeamIndex = plugin.getTeams().indexOf(playerTeam);
-        
-        if (playerTeam.getName().equals("spectator")) {
-            return;
-        }
-        
-        playerSection.set("lives", playerSection.getInt("lives") - 1);
-        plugin.saveConfig();
-        
         var playerLives = playerSection.getInt("lives");
         
-        event.deathMessage(player.displayName().append(Component.text(" ist gestorben! (" +
-            playerLives + " Leben verbleibend)", NamedTextColor.RED)));
+        plugin.getLivesManager().changeLife(player, '-');
         
-        playerTeam.removePlayer(player);
-        plugin.getTeams().get(playerTeamIndex + 1).addPlayer(player);
+        event.deathMessage(player.displayName().append(Component.text(" ist " + (playerLives != 0 ? "gestorben! (" +
+            playerLives + " Leben verbleibend)" : "ausgeschieden!"), NamedTextColor.RED)));
+        player.getWorld().strikeLightningEffect(player.getLocation());
     }
 }

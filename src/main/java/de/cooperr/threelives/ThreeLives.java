@@ -1,8 +1,10 @@
 package de.cooperr.threelives;
 
+import de.cooperr.threelives.command.SendLifeCommand;
 import de.cooperr.threelives.listener.PlayerDeathListener;
 import de.cooperr.threelives.listener.PlayerJoinListener;
 import de.cooperr.threelives.listener.PlayerQuitListener;
+import de.cooperr.threelives.util.LivesManager;
 import de.cooperr.threelives.util.PlaytimeManager;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -21,6 +23,7 @@ public final class ThreeLives extends JavaPlugin {
     
     private final List<Team> teams = new ArrayList<>();
     private PlaytimeManager playtimeManager;
+    private LivesManager livesManager;
     
     @Override
     public void onEnable() {
@@ -39,6 +42,7 @@ public final class ThreeLives extends JavaPlugin {
         initConfig();
         
         playtimeManager = new PlaytimeManager(this);
+        livesManager = new LivesManager(this);
     }
     
     private void initConfig() {
@@ -56,6 +60,7 @@ public final class ThreeLives extends JavaPlugin {
     }
     
     private void commandRegistration() {
+        new SendLifeCommand(this);
     }
     
     private void scoreboardSetup() {
