@@ -49,22 +49,25 @@ public class PlayerJoinListener implements Listener {
     
     private int showLivesGenerator(Player player) {
         var task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            
             var random = ThreadLocalRandom.current().nextInt(4, 7);
             var component = Component.text(random,
                 random == 6 ? NamedTextColor.GREEN :
                     random == 5 ? NamedTextColor.YELLOW :
                         random == 4 ? NamedTextColor.RED : null);
             
-            var title = Title.title(component, Component.text(""), Title.Times.times(Duration.ZERO, Duration.ofMillis(400), Duration.ZERO));
+            var title = Title.title(component, Component.text(""),
+                Title.Times.times(Duration.ZERO, Duration.ofMillis(400), Duration.ZERO));
             
             player.showTitle(title);
+            
         }, 50, 8);
         plugin.getServer().getScheduler().runTaskLater(plugin, task::cancel, 8 * 20);
         
         var lives = ThreadLocalRandom.current().nextInt(4, 7);
         
-        var title = Title.title(Component.text(lives),
-            Component.text(""), Title.Times.times(Duration.ZERO, Duration.ofMillis(400), Duration.ZERO));
+        var title = Title.title(Component.text(lives), Component.text(""),
+            Title.Times.times(Duration.ZERO, Duration.ofMillis(400), Duration.ZERO));
         
         return lives;
     }
