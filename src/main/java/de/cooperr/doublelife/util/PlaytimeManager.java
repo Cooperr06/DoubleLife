@@ -1,16 +1,16 @@
-package de.cooperr.threelives.util;
+package de.cooperr.doublelife.util;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 public class PlaytimeManager {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     private final HashMap<Player, Timer> playerTimers = new HashMap<>();
     
-    public PlaytimeManager(ThreeLives plugin) {
+    public PlaytimeManager(DoubleLife plugin) {
         this.plugin = plugin;
     }
     

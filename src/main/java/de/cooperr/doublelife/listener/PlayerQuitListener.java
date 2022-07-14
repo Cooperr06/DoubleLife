@@ -1,15 +1,15 @@
-package de.cooperr.threelives.listener;
+package de.cooperr.doublelife.listener;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener implements Listener {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     
-    public PlayerQuitListener(ThreeLives plugin) {
+    public PlayerQuitListener(DoubleLife plugin) {
         this.plugin = plugin;
         plugin.registerListener(this);
     }

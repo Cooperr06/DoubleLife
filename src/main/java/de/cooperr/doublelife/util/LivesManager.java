@@ -1,14 +1,14 @@
-package de.cooperr.threelives.util;
+package de.cooperr.doublelife.util;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 public class LivesManager {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     
-    public LivesManager(ThreeLives plugin) {
+    public LivesManager(DoubleLife plugin) {
         this.plugin = plugin;
     }
     

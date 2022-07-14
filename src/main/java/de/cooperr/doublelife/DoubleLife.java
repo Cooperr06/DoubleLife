@@ -1,11 +1,11 @@
-package de.cooperr.threelives;
+package de.cooperr.doublelife;
 
-import de.cooperr.threelives.command.SendLifeCommand;
-import de.cooperr.threelives.listener.PlayerDeathListener;
-import de.cooperr.threelives.listener.PlayerJoinListener;
-import de.cooperr.threelives.listener.PlayerQuitListener;
-import de.cooperr.threelives.util.LivesManager;
-import de.cooperr.threelives.util.PlaytimeManager;
+import de.cooperr.doublelife.command.SendLifeCommand;
+import de.cooperr.doublelife.listener.PlayerDeathListener;
+import de.cooperr.doublelife.listener.PlayerJoinListener;
+import de.cooperr.doublelife.listener.PlayerQuitListener;
+import de.cooperr.doublelife.util.LivesManager;
+import de.cooperr.doublelife.util.PlaytimeManager;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Getter
-public final class ThreeLives extends JavaPlugin {
+public final class DoubleLife extends JavaPlugin {
     
     private final List<Team> teams = new ArrayList<>();
     private PlaytimeManager playtimeManager;

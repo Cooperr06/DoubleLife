@@ -1,6 +1,6 @@
-package de.cooperr.threelives.command;
+package de.cooperr.doublelife.command;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.EntityEffect;
@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 
 public class SendLifeCommand implements TabExecutor {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     
-    public SendLifeCommand(ThreeLives plugin) {
+    public SendLifeCommand(DoubleLife plugin) {
         this.plugin = plugin;
         plugin.registerCommand("sendlife", this);
     }

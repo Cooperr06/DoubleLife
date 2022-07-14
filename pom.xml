@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.cooperr</groupId>
-    <artifactId>three-lives</artifactId>
+    <artifactId>double-life</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>ThreeLives</name>
+    <name>DoubleLife</name>
 
-    <description>Three Lives Plugin for our 3rd Minecraft Server</description>
+    <description>Double Life Plugin for our 3rd Minecraft Server</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

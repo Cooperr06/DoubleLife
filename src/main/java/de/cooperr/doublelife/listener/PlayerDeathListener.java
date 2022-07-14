@@ -1,6 +1,6 @@
-package de.cooperr.threelives.listener;
+package de.cooperr.doublelife.listener;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.event.EventHandler;
@@ -9,9 +9,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeathListener implements Listener {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     
-    public PlayerDeathListener(ThreeLives plugin) {
+    public PlayerDeathListener(DoubleLife plugin) {
         this.plugin = plugin;
         plugin.registerListener(this);
     }

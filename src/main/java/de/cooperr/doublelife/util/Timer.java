@@ -1,17 +1,17 @@
-package de.cooperr.threelives.util;
+package de.cooperr.doublelife.util;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
 
 public class Timer {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     @Getter
     private long time;
     private BukkitTask task;
     
-    public Timer(ThreeLives plugin) {
+    public Timer(DoubleLife plugin) {
         this.plugin = plugin;
     }
     

@@ -1,6 +1,6 @@
-package de.cooperr.threelives.listener;
+package de.cooperr.doublelife.listener;
 
-import de.cooperr.threelives.ThreeLives;
+import de.cooperr.doublelife.DoubleLife;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
@@ -15,9 +15,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerJoinListener implements Listener {
     
-    private final ThreeLives plugin;
+    private final DoubleLife plugin;
     
-    public PlayerJoinListener(ThreeLives plugin) {
+    public PlayerJoinListener(DoubleLife plugin) {
         this.plugin = plugin;
         plugin.registerListener(this);
     }
