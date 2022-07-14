@@ -1,32 +1,22 @@
 package de.cooperr.doublelife.util;
 
 import de.cooperr.doublelife.DoubleLife;
+import lombok.AllArgsConstructor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+@AllArgsConstructor
 public class LivesManager {
     
     private final DoubleLife plugin;
     
-    public LivesManager(DoubleLife plugin) {
-        this.plugin = plugin;
-    }
-    
-    public void changeLife(Player player, char action) {
-        var playerSection = plugin.getConfig().getConfigurationSection("players." + player.getUniqueId());
-        assert playerSection != null;
+    public int removeLife(Player player) {
+        var team = plugin.getPlayerTeamManager().getTeamOfPlayer(player);
+        team.setLives(team.getLives() - 1);
         
-        playerSection.set("lives", playerSection.getInt("lives") + (action == '+' ? 1 : action == '-' ? -1 : 0));
+        plugin.getConfig().set("teams.team" + team.getTeamNumber() + ".lives", team.getLives());
         plugin.saveConfig();
         
-        if (playerSection.getInt("lives") == 0) {
-            player.setGameMode(GameMode.SPECTATOR);
-        }
-    
-        var playerTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getPlayerTeam(player);
-        assert playerTeam != null;
-    
-        playerTeam.removePlayer(player);
-        plugin.getTeams().get(plugin.getTeams().indexOf(playerTeam) + (action == '+' ? -1 : action == '-' ? 1 : 0)).addPlayer(player);
+        return team.getLives();
     }
 }

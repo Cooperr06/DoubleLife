@@ -3,6 +3,7 @@ package de.cooperr.doublelife.listener;
 import de.cooperr.doublelife.DoubleLife;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -20,15 +21,40 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         
         var player = event.getPlayer();
-        var playerSection = plugin.getConfig().getConfigurationSection("players." + player.getUniqueId());
-        assert playerSection != null;
+        var otherMember = plugin.getPlayerTeamManager().getOtherMemberOfPlayer(player);
+        var lives = plugin.getLivesManager().removeLife(player);
         
-        var playerLives = playerSection.getInt("lives");
+        if (lives == 0) {
+            
+            event.deathMessage(player.displayName().append(Component.text(" ist ausgeschieden!", NamedTextColor.RED)));
+            plugin.getServer().broadcast(otherMember.displayName()
+                .append(Component.text(" ist ausgeschieden!", NamedTextColor.DARK_RED)));
+    
+            otherMember.getWorld().strikeLightningEffect(player.getLocation());
+            
+            player.setGameMode(GameMode.SPECTATOR);
+            otherMember.setGameMode(GameMode.SPECTATOR);
+            
+        } else {
+            event.deathMessage(player.displayName().append(Component.text(" ist gestorben! (" + lives +
+                " Leben verbleibend)", NamedTextColor.RED)));
+        }
+    
+        for (int i = 0; i < plugin.getColorTeams().size(); i++) {
         
-        plugin.getLivesManager().changeLife(player, '-');
+            var team = plugin.getColorTeams().get(i);
         
-        event.deathMessage(player.displayName().append(Component.text(" ist " + (playerLives != 0 ? "gestorben! (" +
-            playerLives + " Leben verbleibend)" : "ausgeschieden!"), NamedTextColor.RED)));
+            if (team.hasPlayer(player)) {
+            
+                var lowerTeam = plugin.getColorTeams().get(i + 1);
+            
+                team.removePlayer(player);
+                team.removePlayer(otherMember);
+                lowerTeam.addPlayer(player);
+                lowerTeam.addPlayer(otherMember);
+            }
+        }
+        
         player.getWorld().strikeLightningEffect(player.getLocation());
     }
 }
