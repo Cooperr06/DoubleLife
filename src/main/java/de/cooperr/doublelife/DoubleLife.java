@@ -1,6 +1,5 @@
 package de.cooperr.doublelife;
 
-import de.cooperr.doublelife.command.SendLifeCommand;
 import de.cooperr.doublelife.listener.PlayerDeathListener;
 import de.cooperr.doublelife.listener.PlayerJoinListener;
 import de.cooperr.doublelife.listener.PlayerQuitListener;
@@ -60,7 +59,6 @@ public final class DoubleLife extends JavaPlugin {
     }
     
     private void commandRegistration() {
-        new SendLifeCommand(this);
     }
     
     private void scoreboardSetup() {
