@@ -23,11 +23,16 @@ public class PlayerCommandPreprocessListener implements Listener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         
         var player = event.getPlayer();
+        
+        if (player.isOp()) {
+            return;
+        }
+        
         var command = event.getMessage().split(" ")[0].substring(1).toLowerCase(Locale.ROOT);
     
         if (Arrays.asList(plugin.getDisabledCommands()).contains(command)) {
             player.sendMessage(Component.text("I'm sorry, but you do not have permission to perform this command. " +
-                "Please contact server administrators if you believe that this is in error.", NamedTextColor.RED));
+                "Please contact the server administrators if you believe that this is in error.", NamedTextColor.RED));
             
             event.setCancelled(true);
         }
