@@ -43,7 +43,7 @@ public class PlayerTeamManager {
     
     public Integer getTeamNumberOfTeam(PlayerTeam playerTeam) {
         return playerTeams.stream().filter(team -> team.equals(playerTeam))
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Team not registered")).getTeamNumber();
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("Team does not exist")).getTeamNumber();
     }
     
     public PlayerTeam getTeamOfTeamNumber(Integer teamNumber) {
@@ -54,6 +54,7 @@ public class PlayerTeamManager {
     public Player getOtherMemberOfPlayer(Player player) {
         return Arrays.stream(playerTeams.stream().filter(playerTeam -> playerTeam.contains(player))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team")).getPlayers())
-            .filter(teamMember -> !teamMember.getUniqueId().equals(player.getUniqueId())).findFirst().orElse(null);
+            .filter(teamMember -> !teamMember.getUniqueId().equals(player.getUniqueId()))
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("No other team member found"));
     }
 }

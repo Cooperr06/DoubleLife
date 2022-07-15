@@ -116,14 +116,16 @@ public class Initializer {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
         
+        var teams = new Team[]{
+            scoreboard.registerNewTeam("highlife"),
+            scoreboard.registerNewTeam("midlife"),
+            scoreboard.registerNewTeam("lowlife"),
+            scoreboard.registerNewTeam("spectator")};
+        
         if (scoreboard.getObjective("deaths") == null) {
             scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
         }
     
-        plugin.getColorTeams().addAll(List.of(
-            scoreboard.registerNewTeam("highlife"),
-            scoreboard.registerNewTeam("midlife"),
-            scoreboard.registerNewTeam("lowlife"),
-            scoreboard.registerNewTeam("spectator")));
+        plugin.getColorTeams().addAll(List.of(teams));
     }
 }

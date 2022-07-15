@@ -36,5 +36,23 @@ public class PlayerJoinListener implements Listener {
         if (plugin.getServer().getOnlinePlayers().isEmpty()) {
             plugin.getInitializer().startCheckPlaytimeTask();
         }
+        
+        var scoreboardTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getPlayerTeam(player);
+        
+        if (scoreboardTeam == null) {
+    
+            var team = plugin.getPlayerTeamManager().getTeamOfPlayer(player);
+            
+            var scoreboardTeamName =
+                team.getLives() == 3 ? "highlife" :
+                    team.getLives() == 2 ? "midlife" :
+                        team.getLives() == 1 ? "lowlife" :
+                            team.getLives() == 0 ? "spectator" : "";
+    
+            scoreboardTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getTeam(scoreboardTeamName);
+            assert scoreboardTeam != null;
+            
+            scoreboardTeam.addPlayer(player);
+        }
     }
 }
