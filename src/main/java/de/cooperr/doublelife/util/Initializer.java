@@ -112,7 +112,7 @@ public class Initializer {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
         
-        if (scoreboard.getTeams().size() == 4 && scoreboard.getObjective("deaths") != null) {
+        if (scoreboard.getObjective("deaths") != null) {
             return;
         }
         
