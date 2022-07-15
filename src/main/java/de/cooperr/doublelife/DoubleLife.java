@@ -25,7 +25,7 @@ import java.util.TimerTask;
 public final class DoubleLife extends JavaPlugin {
     
     private final List<Team> colorTeams = new ArrayList<>(4);
-    private final String[] disabledCommands = /*{"seed", "teammsg", "tm", "trigger"}*/ {};
+    private final String[] disabledCommands = {"seed", "teammsg", "tm", "trigger", "help", "pl", "plugins"};
     
     @Setter
     private int teamsSize;

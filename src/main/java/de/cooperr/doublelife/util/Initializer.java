@@ -116,16 +116,28 @@ public class Initializer {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
         
-        var teams = new Team[]{
-            scoreboard.registerNewTeam("highlife"),
-            scoreboard.registerNewTeam("midlife"),
-            scoreboard.registerNewTeam("lowlife"),
-            scoreboard.registerNewTeam("spectator")};
+        var teams = new HashMap<String, Team>();
+        teams.put("highlife", scoreboard.getTeam("highlife"));
+        teams.put("midlife", scoreboard.getTeam("midlife"));
+        teams.put("lowlife", scoreboard.getTeam("lowlife"));
+        teams.put("spectator", scoreboard.getTeam("spectator"));
+    
+        teams.forEach((name, team) -> {
+            if (team == null) {
+                var newTeam = scoreboard.registerNewTeam(name);
+                newTeam.color(
+                    name.equals("highlife") ? NamedTextColor.GREEN :
+                        name.equals("midlife") ? NamedTextColor.YELLOW :
+                            name.equals("lowlife") ? NamedTextColor.RED :
+                                name.equals("spectator") ? NamedTextColor.GRAY : null);
+                teams.put(name, newTeam);
+            }
+        });
         
         if (scoreboard.getObjective("deaths") == null) {
             scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
         }
     
-        plugin.getColorTeams().addAll(List.of(teams));
+        plugin.getColorTeams().addAll(teams.values());
     }
 }
