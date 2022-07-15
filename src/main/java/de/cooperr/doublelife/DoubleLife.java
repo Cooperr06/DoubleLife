@@ -18,6 +18,8 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Getter
 public final class DoubleLife extends JavaPlugin {
@@ -52,11 +54,17 @@ public final class DoubleLife extends JavaPlugin {
         initializer = new Initializer(this);
         playerTeamManager = new PlayerTeamManager(this);
         initializer.init();
-        playtimeManager = new PlaytimeManager(this);
-        livesManager = new LivesManager(this);
+        
+        var plugin = this;
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                initializer.lateInit();
+                playtimeManager = new PlaytimeManager(plugin);
+                livesManager = new LivesManager(plugin);
+            }
+        }, 1000);
     }
-    
-    
     
     private void listenerRegistration() {
         new PlayerCommandPreprocessListener(this);

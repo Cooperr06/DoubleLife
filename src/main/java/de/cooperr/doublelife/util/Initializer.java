@@ -25,11 +25,14 @@ public class Initializer {
         plugin.saveConfig();
         
         startDailyTask();
-        scoreboardSetup();
         
         if (!plugin.getServer().getOnlinePlayers().isEmpty()) {
             startCheckPlaytimeTask();
         }
+    }
+    
+    public void lateInit() {
+        scoreboardSetup();
     }
     
     private void startDailyTask() {
