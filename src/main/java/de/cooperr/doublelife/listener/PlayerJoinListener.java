@@ -27,10 +27,14 @@ public class PlayerJoinListener implements Listener {
         
         var player = event.getPlayer();
         
+        if (plugin.getColorTeams().stream().noneMatch(team -> team.hasPlayer(player))) {
+            plugin.getColorTeams().get(0).addPlayer(player);
+        }
+        
         plugin.getPlaytimeManager().startPlayerTimer(player);
         
         if (plugin.getServer().getOnlinePlayers().isEmpty()) {
-            plugin.startCheckPlaytimeTask();
+            plugin.getInitializer().startCheckPlaytimeTask();
         }
     }
 }
