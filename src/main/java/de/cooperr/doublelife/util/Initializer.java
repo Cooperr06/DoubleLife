@@ -112,9 +112,7 @@ public class Initializer {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
         
-        if (scoreboard.getTeams().stream().anyMatch(team -> team.getName().contains("life")) &&
-            scoreboard.getTeams().size() == 4 &&
-            scoreboard.getObjective("deaths") != null) {
+        if (scoreboard.getTeams().size() == 4 && scoreboard.getObjective("deaths") != null) {
             return;
         }
         
