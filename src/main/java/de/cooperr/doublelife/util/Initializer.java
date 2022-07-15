@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -114,29 +115,23 @@ public class Initializer {
     private void scoreboardSetup() {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
-    
-        var highlifeTeam = scoreboard.getTeam("highlife");      // 0
-        var midlifeTeam = scoreboard.getTeam("midlife");        // 1
-        var lowlifeTeam = scoreboard.getTeam("lowlife");        // 2
-        var spectatorTeam = scoreboard.getTeam("spectator");    // 3
+        
+        var teams = new HashMap<String, Team>();
+        teams.put("highlife", scoreboard.getTeam("highlife"));
+        teams.put("midlife", scoreboard.getTeam("midlife"));
+        teams.put("lowlife", scoreboard.getTeam("lowlife"));
+        teams.put("spectator", scoreboard.getTeam("spectator"));
         
         if (scoreboard.getObjective("deaths") == null) {
-    
-            highlifeTeam = scoreboard.registerNewTeam("highlife");      // 0
-            midlifeTeam = scoreboard.registerNewTeam("midlife");        // 1
-            lowlifeTeam = scoreboard.registerNewTeam("lowlife");        // 2
-            spectatorTeam = scoreboard.registerNewTeam("spectator");    // 3
-    
-            highlifeTeam.color(NamedTextColor.GREEN);
-            midlifeTeam.color(NamedTextColor.YELLOW);
-            lowlifeTeam.color(NamedTextColor.RED);
-            spectatorTeam.color(NamedTextColor.GRAY);
-    
             scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
         }
-        
-        assert highlifeTeam != null && midlifeTeam != null && lowlifeTeam != null && spectatorTeam != null;
     
-        plugin.getColorTeams().addAll(List.of(highlifeTeam, midlifeTeam, lowlifeTeam, spectatorTeam));
+        teams.forEach((name, team) -> {
+            if (team == null) {
+                teams.put(name, scoreboard.registerNewTeam(name));
+            }
+        });
+    
+        plugin.getColorTeams().addAll(teams.values());
     }
 }
