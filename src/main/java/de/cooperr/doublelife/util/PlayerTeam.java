@@ -34,6 +34,8 @@ public class PlayerTeam {
         
         players[0] = plugin.getServer().getPlayer(UUID.fromString(teamMembers[0]));
         players[1] = plugin.getServer().getPlayer(UUID.fromString(teamMembers[1]));
+    
+        plugin.getLogger().info(Arrays.toString(teamMembers));
     }
     
     public boolean contains(Player player) {
