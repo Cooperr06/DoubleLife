@@ -40,7 +40,7 @@ public class Initializer {
         
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             
-            for (int i = 1; i < 5; i++) {
+            for (var i = 1; i < plugin.getTeamsSize(); i++) {
                 
                 var memberSection = plugin.getConfig().getConfigurationSection("teams.team" + i + ".members");
                 assert memberSection != null;
@@ -67,7 +67,7 @@ public class Initializer {
     
             var playerTimes = new ArrayList<Map<String, Object>>();
     
-            for (int i = 1; i < 5; i++) {
+            for (var i = 1; i < plugin.getTeamsSize(); i++) {
         
                 var teamSection = teamsSection.getConfigurationSection("team" + i);
                 assert teamSection != null;
@@ -77,7 +77,7 @@ public class Initializer {
                 playerTimes.add(memberSection.getValues(true));
             }
     
-            for (Map<String, Object> playerTime : playerTimes) {
+            for (var playerTime : playerTimes) {
         
                 playerTime.forEach((uuid, object) -> {
             

@@ -12,7 +12,7 @@ import java.util.List;
 public class PlayerTeamManager {
     
     private final DoubleLife plugin;
-    private final List<PlayerTeam> playerTeams = new ArrayList<>(4);
+    private final List<PlayerTeam> playerTeams = new ArrayList<>();
     
     public PlayerTeamManager(DoubleLife plugin) {
         this.plugin = plugin;
@@ -20,11 +20,13 @@ public class PlayerTeamManager {
     }
     
     private void init() {
-        
+    
         var teamsSection = plugin.getConfig().getConfigurationSection("teams");
         assert teamsSection != null;
     
-        for (int i = 1; i < 5; i++) {
+        plugin.setTeamsSize(teamsSection.getKeys(false).size());
+    
+        for (var i = 1; i < plugin.getTeamsSize(); i++) {
             
             var teamSection = teamsSection.getConfigurationSection("team" + i);
             assert teamSection != null;

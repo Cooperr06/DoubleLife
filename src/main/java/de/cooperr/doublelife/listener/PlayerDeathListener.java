@@ -40,7 +40,7 @@ public class PlayerDeathListener implements Listener {
                 " Leben verbleibend)", NamedTextColor.RED)));
         }
     
-        for (int i = 0; i < plugin.getColorTeams().size(); i++) {
+        for (var i = 0; i < plugin.getColorTeams().size(); i++) {
         
             var team = plugin.getColorTeams().get(i);
         

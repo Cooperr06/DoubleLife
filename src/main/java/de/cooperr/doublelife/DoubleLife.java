@@ -25,6 +25,9 @@ public final class DoubleLife extends JavaPlugin {
     private final List<Team> colorTeams = new ArrayList<>();
     private final String[] disabledCommands = /*{"seed", "teammsg", "tm", "trigger"}*/ {};
     
+    @Setter
+    private int teamsSize;
+    
     private Initializer initializer;
     private PlaytimeManager playtimeManager;
     private PlayerTeamManager playerTeamManager;
@@ -47,11 +50,10 @@ public final class DoubleLife extends JavaPlugin {
     
     private void init() {
         initializer = new Initializer(this);
-        playtimeManager = new PlaytimeManager(this);
         playerTeamManager = new PlayerTeamManager(this);
-        livesManager = new LivesManager(this);
-    
         initializer.init();
+        playtimeManager = new PlaytimeManager(this);
+        livesManager = new LivesManager(this);
     }
     
     
