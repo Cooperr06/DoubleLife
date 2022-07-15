@@ -40,7 +40,7 @@ public class Initializer {
         
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             
-            for (var i = 1; i < plugin.getTeamsSize(); i++) {
+            for (var i = 1; i <= plugin.getTeamsSize(); i++) {
                 
                 var memberSection = plugin.getConfig().getConfigurationSection("teams.team" + i + ".members");
                 assert memberSection != null;
