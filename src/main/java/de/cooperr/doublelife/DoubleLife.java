@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 public final class DoubleLife extends JavaPlugin {
     
-    private final List<Team> colorTeams = new ArrayList<>();
+    private final List<Team> colorTeams = new ArrayList<>(4);
     private final String[] disabledCommands = /*{"seed", "teammsg", "tm", "trigger"}*/ {};
     
     @Setter

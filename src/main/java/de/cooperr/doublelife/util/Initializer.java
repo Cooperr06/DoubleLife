@@ -111,23 +111,29 @@ public class Initializer {
     private void scoreboardSetup() {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
+    
+        var highlifeTeam = scoreboard.getTeam("highlife");      // 0
+        var midlifeTeam = scoreboard.getTeam("midlife");        // 1
+        var lowlifeTeam = scoreboard.getTeam("lowlife");        // 2
+        var spectatorTeam = scoreboard.getTeam("spectator");    // 3
         
-        if (scoreboard.getTeams().size() == 4 && scoreboard.getObjective("deaths") != null) {
-            return;
+        if (scoreboard.getObjective("deaths") == null) {
+    
+            highlifeTeam = scoreboard.registerNewTeam("highlife");      // 0
+            midlifeTeam = scoreboard.registerNewTeam("midlife");        // 1
+            lowlifeTeam = scoreboard.registerNewTeam("lowlife");        // 2
+            spectatorTeam = scoreboard.registerNewTeam("spectator");    // 3
+    
+            highlifeTeam.color(NamedTextColor.GREEN);
+            midlifeTeam.color(NamedTextColor.YELLOW);
+            lowlifeTeam.color(NamedTextColor.RED);
+            spectatorTeam.color(NamedTextColor.GRAY);
+    
+            scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
         }
         
-        var highlifeTeam = scoreboard.registerNewTeam("highlife");      // 0
-        var midlifeTeam = scoreboard.registerNewTeam("midlife");        // 1
-        var lowlifeTeam = scoreboard.registerNewTeam("lowlife");        // 2
-        var spectatorTeam = scoreboard.registerNewTeam("spectator");    // 3
-        
-        highlifeTeam.color(NamedTextColor.GREEN);
-        midlifeTeam.color(NamedTextColor.YELLOW);
-        lowlifeTeam.color(NamedTextColor.RED);
-        spectatorTeam.color(NamedTextColor.GRAY);
+        assert highlifeTeam != null && midlifeTeam != null && lowlifeTeam != null && spectatorTeam != null;
     
         plugin.getColorTeams().addAll(List.of(highlifeTeam, midlifeTeam, lowlifeTeam, spectatorTeam));
-        
-        scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
     }
 }
