@@ -30,7 +30,7 @@ public class PlayerJoinListener implements Listener {
         plugin.getPlaytimeManager().startPlayerTimer(player);
         
         if (plugin.getServer().getOnlinePlayers().isEmpty()) {
-            plugin.startCheckPlaytimeTask();
+            plugin.getInitializer().startCheckPlaytimeTask();
         }
     }
 }

@@ -13,18 +13,19 @@ import java.util.UUID;
 @Setter
 public class PlayerTeam {
     
-    private final DoubleLife plugin;
     private final Player[] players = new Player[2];
     
-    private int teamNumber;
+    private final DoubleLife plugin;
+    private final int teamNumber;
+    
     private int lives;
     
-    public PlayerTeam(DoubleLife plugin) {
+    public PlayerTeam(DoubleLife plugin, int teamNumber) {
         this.plugin = plugin;
+        this.teamNumber = teamNumber;
     }
     
     public void init(ConfigurationSection section) {
-        teamNumber = Integer.parseInt(section.getName().substring(section.getName().length() - 1));
         lives = section.getInt("lives");
         
         var memberSection = section.getConfigurationSection("members");
