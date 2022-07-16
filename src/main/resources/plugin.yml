@@ -4,3 +4,8 @@ main: de.cooperr.doublelife.DoubleLife
 api-version: 1.19
 authors: [ Cooperr06 ]
 description: Double Life Plugin for our 3rd Minecraft Server
+
+commands:
+  time:
+    description: Zeigt dir an, wie viel Zeit du noch hast, bevor du gekickt wirst
+    usage: /time

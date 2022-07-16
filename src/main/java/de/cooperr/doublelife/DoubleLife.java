@@ -1,5 +1,6 @@
 package de.cooperr.doublelife;
 
+import de.cooperr.doublelife.command.TimeCommand;
 import de.cooperr.doublelife.listener.*;
 import de.cooperr.doublelife.util.*;
 import lombok.Getter;
@@ -78,6 +79,7 @@ public final class DoubleLife extends JavaPlugin {
     }
     
     private void commandRegistration() {
+        new TimeCommand(this);
     }
     
     public void registerListener(Listener listener) {
