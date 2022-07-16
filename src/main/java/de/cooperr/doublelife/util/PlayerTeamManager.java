@@ -2,7 +2,7 @@ package de.cooperr.doublelife.util;
 
 import de.cooperr.doublelife.DoubleLife;
 import lombok.Getter;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class PlayerTeamManager {
     
         plugin.setTeamsSize(teamsSection.getKeys(false).size());
     
-        for (var i = 1; i < plugin.getTeamsSize(); i++) {
+        for (var i = 1; i <= plugin.getTeamsSize(); i++) {
             
             var teamSection = teamsSection.getConfigurationSection("team" + i);
             assert teamSection != null;
@@ -36,22 +36,12 @@ public class PlayerTeamManager {
         }
     }
     
-    public PlayerTeam getTeamOfPlayer(Player player) {
+    public PlayerTeam getTeamOfPlayer(OfflinePlayer player) {
         return playerTeams.stream().filter(playerTeam -> playerTeam.contains(player))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team"));
     }
     
-    public Integer getTeamNumberOfTeam(PlayerTeam playerTeam) {
-        return playerTeams.stream().filter(team -> team.equals(playerTeam))
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Team does not exist")).getTeamNumber();
-    }
-    
-    public PlayerTeam getTeamOfTeamNumber(Integer teamNumber) {
-        return playerTeams.stream().filter(playerTeam -> playerTeam.getTeamNumber() == teamNumber)
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("No team found with number " + teamNumber));
-    }
-    
-    public Player getOtherMemberOfPlayer(Player player) {
+    public OfflinePlayer getOtherMemberOfPlayer(OfflinePlayer player) {
         return Arrays.stream(playerTeams.stream().filter(playerTeam -> playerTeam.contains(player))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team")).getPlayers())
             .filter(teamMember -> !teamMember.getUniqueId().equals(player.getUniqueId()))

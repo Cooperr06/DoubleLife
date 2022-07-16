@@ -19,7 +19,7 @@ public class PlayerQuitListener implements Listener {
         
         var player = event.getPlayer();
     
-        plugin.getPlaytimeManager().stopPlayerTimer(player, false);
+        plugin.getPlaytimeManager().stopPlayerTimer(plugin.getServer().getOfflinePlayer(player.getUniqueId()), false);
     
         if (plugin.getServer().getOnlinePlayers().size() == 1) {
             plugin.getCheckPlaytimeTask().cancel();

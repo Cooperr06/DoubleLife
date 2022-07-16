@@ -2,7 +2,6 @@ package de.cooperr.doublelife.util;
 
 import de.cooperr.doublelife.DoubleLife;
 import lombok.AllArgsConstructor;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor

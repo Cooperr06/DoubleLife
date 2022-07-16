@@ -3,8 +3,8 @@ package de.cooperr.doublelife.util;
 import de.cooperr.doublelife.DoubleLife;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 public class PlayerTeam {
     
-    private final Player[] players = new Player[2];
+    private final OfflinePlayer[] players = new OfflinePlayer[2];
     
     private final DoubleLife plugin;
     private final int teamNumber;
@@ -32,13 +32,11 @@ public class PlayerTeam {
         assert memberSection != null;
         var teamMembers = memberSection.getKeys(false).toArray(String[]::new);
         
-        players[0] = plugin.getServer().getPlayer(UUID.fromString(teamMembers[0]));
-        players[1] = plugin.getServer().getPlayer(UUID.fromString(teamMembers[1]));
-    
-        plugin.getLogger().info(Arrays.toString(teamMembers));
+        players[0] = plugin.getServer().getOfflinePlayer(UUID.fromString(teamMembers[0]));
+        players[1] = plugin.getServer().getOfflinePlayer(UUID.fromString(teamMembers[1]));
     }
     
-    public boolean contains(Player player) {
+    public boolean contains(OfflinePlayer player) {
         return Arrays.stream(players).filter(teamMember -> teamMember.getUniqueId()
             .equals(player.getUniqueId())).findFirst().orElse(null) != null;
     }

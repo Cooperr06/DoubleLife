@@ -1,17 +1,10 @@
 package de.cooperr.doublelife.listener;
 
 import de.cooperr.doublelife.DoubleLife;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.title.Title;
-import org.bukkit.entity.Player;
+import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerJoinListener implements Listener {
     
@@ -26,33 +19,24 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         
         var player = event.getPlayer();
+        var playerOffline = plugin.getServer().getOfflinePlayer(player.getUniqueId());
+        var otherMember = plugin.getPlayerTeamManager().getOtherMemberOfPlayer(playerOffline);
+        assert otherMember != null;
         
-        if (plugin.getColorTeams().stream().noneMatch(team -> team.hasPlayer(player))) {
-            plugin.getColorTeams().get(0).addPlayer(player);
+        var otherTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getPlayerTeam(otherMember);
+        if (otherTeam == null) {
+            otherTeam = plugin.getColorTeams().get(0);
         }
+        otherTeam.addPlayer(player);
         
-        plugin.getPlaytimeManager().startPlayerTimer(player);
-        
-        if (plugin.getServer().getOnlinePlayers().isEmpty()) {
-            plugin.getInitializer().startCheckPlaytimeTask();
-        }
-        
-        var scoreboardTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getPlayerTeam(player);
-        
-        if (scoreboardTeam == null) {
-    
-            var team = plugin.getPlayerTeamManager().getTeamOfPlayer(player);
+        if (plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline).getTeamNumber() == 3) {
+            player.setGameMode(GameMode.SPECTATOR);
+        } else {
+            plugin.getPlaytimeManager().startPlayerTimer(playerOffline);
             
-            var scoreboardTeamName =
-                team.getLives() == 3 ? "highlife" :
-                    team.getLives() == 2 ? "midlife" :
-                        team.getLives() == 1 ? "lowlife" :
-                            team.getLives() == 0 ? "spectator" : "";
-    
-            scoreboardTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getTeam(scoreboardTeamName);
-            assert scoreboardTeam != null;
-            
-            scoreboardTeam.addPlayer(player);
+            if (plugin.getServer().getOnlinePlayers().size() == 1) {
+                plugin.getInitializer().startCheckPlaytimeTask();
+            }
         }
     }
 }

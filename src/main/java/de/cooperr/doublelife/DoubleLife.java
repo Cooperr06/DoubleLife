@@ -1,20 +1,17 @@
 package de.cooperr.doublelife;
 
-import de.cooperr.doublelife.listener.PlayerCommandPreprocessListener;
-import de.cooperr.doublelife.listener.PlayerDeathListener;
-import de.cooperr.doublelife.listener.PlayerJoinListener;
-import de.cooperr.doublelife.listener.PlayerQuitListener;
-import de.cooperr.doublelife.util.Initializer;
-import de.cooperr.doublelife.util.LivesManager;
-import de.cooperr.doublelife.util.PlayerTeamManager;
-import de.cooperr.doublelife.util.PlaytimeManager;
+import de.cooperr.doublelife.listener.*;
+import de.cooperr.doublelife.util.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +27,7 @@ public final class DoubleLife extends JavaPlugin {
     @Setter
     private int teamsSize;
     
+    private Config config;
     private Initializer initializer;
     private PlaytimeManager playtimeManager;
     private PlayerTeamManager playerTeamManager;
@@ -48,9 +46,14 @@ public final class DoubleLife extends JavaPlugin {
     
     @Override
     public void onDisable() {
+        saveConfig();
+        for (Player onlinePlayer : getServer().getOnlinePlayers()) {
+            getPlaytimeManager().stopPlayerTimer(getServer().getOfflinePlayer(onlinePlayer.getUniqueId()), false);
+        }
     }
     
     private void init() {
+        config = new Config(this, "config.yml");
         initializer = new Initializer(this);
         playerTeamManager = new PlayerTeamManager(this);
         initializer.init();
@@ -67,6 +70,7 @@ public final class DoubleLife extends JavaPlugin {
     }
     
     private void listenerRegistration() {
+        new AsyncPlayerPreLoginListener(this);
         new PlayerCommandPreprocessListener(this);
         new PlayerDeathListener(this);
         new PlayerJoinListener(this);
@@ -86,5 +90,15 @@ public final class DoubleLife extends JavaPlugin {
         assert pluginCommand != null;
         
         pluginCommand.setExecutor(executor);
+    }
+    
+    @Override
+    public @NotNull FileConfiguration getConfig() {
+        return config;
+    }
+    
+    @Override
+    public void saveConfig() {
+        config.save();
     }
 }

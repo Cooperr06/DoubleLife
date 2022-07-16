@@ -4,6 +4,7 @@ import de.cooperr.doublelife.DoubleLife;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -50,12 +51,12 @@ public class Initializer {
                 assert memberSection != null;
                 
                 memberSection.getKeys(false).forEach(playerUuid ->
-                    plugin.getPlaytimeManager().stopPlayerTimer(plugin.getServer().getPlayer(playerUuid), true));
+                    plugin.getPlaytimeManager().stopPlayerTimer(plugin.getServer().getOfflinePlayer(playerUuid), true));
                 
                 memberSection.getKeys(false).stream()
                     .filter(playerUuid -> plugin.getServer().getOnlinePlayers()
                         .stream().anyMatch(player -> player.getUniqueId().toString().equals(playerUuid)))
-                    .forEach(playerUuid -> plugin.getPlaytimeManager().startPlayerTimer(plugin.getServer().getPlayer(playerUuid)));
+                    .forEach(playerUuid -> plugin.getPlaytimeManager().startPlayerTimer(plugin.getServer().getOfflinePlayer(playerUuid)));
                 
             }
         }, delay, 1000 * 60 * 60 * 24, TimeUnit.MILLISECONDS);
@@ -63,50 +64,55 @@ public class Initializer {
     
     public void startCheckPlaytimeTask() {
         
-        var teamsSection = plugin.getConfig().getConfigurationSection("teams");
-        assert teamsSection != null;
-        var feedback = new ConcurrentHashMap<Player, Integer>();
-    
+        var feedback = new ConcurrentHashMap<OfflinePlayer, Integer>();
+        
         plugin.setCheckPlaytimeTask(plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-    
+            
             var playerTimes = new ArrayList<Map<String, Object>>();
-    
-            for (var i = 1; i < plugin.getTeamsSize(); i++) {
-        
-                var teamSection = teamsSection.getConfigurationSection("team" + i);
-                assert teamSection != null;
-                var memberSection = teamSection.getConfigurationSection("members");
+            
+            for (var i = 1; i <= plugin.getTeamsSize(); i++) {
+                
+                var teamsSection = plugin.getConfig().getConfigurationSection("teams");
+                assert teamsSection != null;
+                var memberSection = teamsSection.getConfigurationSection("team" + i + ".members");
                 assert memberSection != null;
-        
-                playerTimes.add(memberSection.getValues(true));
+                
+                playerTimes.add(memberSection.getValues(false));
             }
-    
+            
             for (var playerTime : playerTimes) {
-        
+                
                 playerTime.forEach((uuid, object) -> {
-            
+                    
                     var currentTime = Integer.parseInt(String.valueOf(object));
-                    var player = plugin.getServer().getPlayer(UUID.fromString(uuid));
-                    assert player != null;
-                    var timer = plugin.getPlaytimeManager().getPlayerTimers().get(player);
-            
-                    if (timer.getTime() + currentTime >= 60 * 60 * 2) {
-                
-                        player.kick(Component.text("Deine Zeit ist abgelaufen!", NamedTextColor.DARK_RED, TextDecoration.BOLD));
-                        plugin.getPlaytimeManager().stopPlayerTimer(player, true);
-                
-                        feedback.put(player, 0);
-                        return;
-                
-                    } else if ((feedback.get(player) + 1) % 30 == 0) {
-                
-                        player.sendMessage(Component.text("Du hast noch " + Timer.formatTime(7200 - (timer.getTime() + currentTime)) +
-                            " übrig, bevor du gekickt wirst!", NamedTextColor.RED));
-                
-                        feedback.put(player, 0);
-                        return;
+                    var offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
+                    
+                    if (offlinePlayer.isOnline() && plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(offlinePlayer).getTeamNumber() + ".lives") != 0) {
+                        
+                        var timer = plugin.getPlaytimeManager().getPlayerTimers().get(offlinePlayer);
+                        
+                        feedback.putIfAbsent(offlinePlayer, 0);
+                        
+                        if (timer.getTime() + currentTime >= 60 * 60 * 2) {
+                            
+                            ((Player) offlinePlayer).kick(Component.text("Deine Zeit ist abgelaufen!", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+                            plugin.getConfig().set("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(offlinePlayer).getTeamNumber() +
+                                ".members." + offlinePlayer.getUniqueId(), timer.getTime() + currentTime);
+                            plugin.getPlaytimeManager().stopPlayerTimer(offlinePlayer, true);
+                            
+                            feedback.put(offlinePlayer, 0);
+                            return;
+                            
+                        } else if ((feedback.get(offlinePlayer) + 1) % 30 == 0) {
+                            
+                            ((Player) offlinePlayer).sendMessage(Component.text("Du hast noch " + Timer.formatTime(60 * 60 * 2 - (timer.getTime() + currentTime)) +
+                                " übrig, bevor du gekickt wirst!", NamedTextColor.RED));
+                            
+                            feedback.put(offlinePlayer, 0);
+                            return;
+                        }
+                        feedback.put(offlinePlayer, feedback.get(offlinePlayer) + 1);
                     }
-                    feedback.put(player, feedback.get(player) + 1);
                 });
             }
         }, 20 * 30, 20 * 30));
@@ -121,7 +127,7 @@ public class Initializer {
         teams.put("midlife", scoreboard.getTeam("midlife"));
         teams.put("lowlife", scoreboard.getTeam("lowlife"));
         teams.put("spectator", scoreboard.getTeam("spectator"));
-    
+        
         teams.forEach((name, team) -> {
             if (team == null) {
                 var newTeam = scoreboard.registerNewTeam(name);
@@ -137,7 +143,7 @@ public class Initializer {
         if (scoreboard.getObjective("deaths") == null) {
             scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
         }
-    
+        
         plugin.getColorTeams().addAll(teams.values());
     }
 }

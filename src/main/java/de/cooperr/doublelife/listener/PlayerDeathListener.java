@@ -4,6 +4,7 @@ import de.cooperr.doublelife.DoubleLife;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -27,13 +28,9 @@ public class PlayerDeathListener implements Listener {
         if (lives == 0) {
             
             event.deathMessage(player.displayName().append(Component.text(" ist ausgeschieden!", NamedTextColor.RED)));
-            plugin.getServer().broadcast(otherMember.displayName()
-                .append(Component.text(" ist ausgeschieden!", NamedTextColor.DARK_RED)));
-    
-            otherMember.getWorld().strikeLightningEffect(player.getLocation());
+            plugin.getServer().broadcast(Component.text(otherMember.getName() + " ist ausgeschieden!", NamedTextColor.DARK_RED));
             
             player.setGameMode(GameMode.SPECTATOR);
-            otherMember.setGameMode(GameMode.SPECTATOR);
             
         } else {
             event.deathMessage(player.displayName().append(Component.text(" ist gestorben! (" + lives +
@@ -47,11 +44,21 @@ public class PlayerDeathListener implements Listener {
             if (team.hasPlayer(player)) {
             
                 var lowerTeam = plugin.getColorTeams().get(i + 1);
-            
-                team.removePlayer(player);
-                team.removePlayer(otherMember);
+                
                 lowerTeam.addPlayer(player);
-                lowerTeam.addPlayer(otherMember);
+                
+                if (otherMember.isOnline()) {
+                    var onlineOtherMember = otherMember.getPlayer();
+                    assert onlineOtherMember != null;
+    
+                    lowerTeam.addPlayer(otherMember);
+                    onlineOtherMember.getWorld().strikeLightningEffect(player.getLocation());
+                    
+                    if (lowerTeam.getName().equals("spectator")) {
+                        onlineOtherMember.setGameMode(GameMode.SPECTATOR);
+                    }
+                }
+                break;
             }
         }
         
