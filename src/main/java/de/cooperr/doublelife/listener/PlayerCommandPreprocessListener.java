@@ -19,7 +19,7 @@ public class PlayerCommandPreprocessListener implements Listener {
         plugin.registerListener(this);
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         
         var player = event.getPlayer();

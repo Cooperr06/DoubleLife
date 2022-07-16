@@ -17,7 +17,7 @@ public class AsyncPlayerPreLoginListener implements Listener {
         plugin.registerListener(this);
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         
         var player = plugin.getServer().getOfflinePlayer(event.getUniqueId());
