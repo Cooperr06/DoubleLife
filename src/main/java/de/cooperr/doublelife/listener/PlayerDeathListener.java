@@ -27,10 +27,11 @@ public class PlayerDeathListener implements Listener {
         
         if (lives == 0) {
             
-            event.deathMessage(player.displayName().append(Component.text(" ist ausgeschieden!", NamedTextColor.RED)));
+            event.deathMessage(player.displayName().color(NamedTextColor.DARK_RED).append(Component.text(" ist ausgeschieden!", NamedTextColor.DARK_RED)));
             plugin.getServer().broadcast(Component.text(otherMember.getName() + " ist ausgeschieden!", NamedTextColor.DARK_RED));
             
             player.setGameMode(GameMode.SPECTATOR);
+            plugin.getPlaytimeManager().stopPlayerTimer(plugin.getServer().getOfflinePlayer(player.getUniqueId()), true);
             
         } else {
             event.deathMessage(player.displayName().append(Component.text(" ist gestorben! (" + lives +
@@ -54,8 +55,9 @@ public class PlayerDeathListener implements Listener {
                     lowerTeam.addPlayer(otherMember);
                     onlineOtherMember.getWorld().strikeLightningEffect(player.getLocation());
                     
-                    if (lowerTeam.getName().equals("spectator")) {
+                    if (lives == 0) {
                         onlineOtherMember.setGameMode(GameMode.SPECTATOR);
+                        plugin.getPlaytimeManager().stopPlayerTimer(plugin.getServer().getOfflinePlayer(player.getUniqueId()), true);
                     }
                 }
                 break;
