@@ -23,13 +23,16 @@ public class PlayerJoinListener implements Listener {
         var otherMember = plugin.getPlayerTeamManager().getOtherMemberOfPlayer(playerOffline);
         assert otherMember != null;
         
-        var otherTeam = plugin.getServer().getScoreboardManager().getMainScoreboard().getPlayerTeam(otherMember);
-        if (otherTeam == null) {
-            otherTeam = plugin.getColorTeams().get(0);
-        }
-        otherTeam.addPlayer(player);
+        var lives = plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline).getLives();
         
-        if (plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline).getTeamNumber() == 3) {
+        switch (lives) {
+            case 3 -> plugin.getColorTeams().get(0).addPlayer(player);
+            case 2 -> plugin.getColorTeams().get(1).addPlayer(player);
+            case 1 -> plugin.getColorTeams().get(2).addPlayer(player);
+            case 0 -> plugin.getColorTeams().get(3).addPlayer(player);
+        }
+        
+        if (lives == 0) {
             player.setGameMode(GameMode.SPECTATOR);
         } else {
             plugin.getPlaytimeManager().startPlayerTimer(playerOffline);

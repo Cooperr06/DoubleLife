@@ -36,8 +36,14 @@ public class TimeCommand implements CommandExecutor {
         
         var playerOffline = plugin.getServer().getOfflinePlayer(player.getUniqueId());
         var configTime = plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline)
-            .getTeamNumber() + "members." + player.getUniqueId());
-        var remainingTime = 60 * 60 * 2 - (plugin.getPlaytimeManager().getPlayerTimers().get(playerOffline).getTime() + configTime);
+            .getTeamNumber() + ".members." + player.getUniqueId());
+        var timerTime = plugin.getPlaytimeManager().getPlayerTimers().get(playerOffline).getTime();
+        var remainingTime = 60 * 60 * 2 - (timerTime + configTime);
+        
+        if (plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline).getLives() == 0) {
+            player.sendMessage(Component.text("Du darfst unbegrenzt spielen!", NamedTextColor.RED));
+            return true;
+        }
         
         if (remainingTime > 30) {
             player.sendMessage(Component.text("Du hast noch " + Timer.formatTime(remainingTime) + " Zeit, bis du gekickt wirst!", NamedTextColor.RED));

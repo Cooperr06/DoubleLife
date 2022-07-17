@@ -122,28 +122,46 @@ public class Initializer {
         
         var scoreboard = plugin.getServer().getScoreboardManager().getMainScoreboard();
         
-        var teams = new HashMap<String, Team>();
-        teams.put("highlife", scoreboard.getTeam("highlife"));
-        teams.put("midlife", scoreboard.getTeam("midlife"));
-        teams.put("lowlife", scoreboard.getTeam("lowlife"));
-        teams.put("spectator", scoreboard.getTeam("spectator"));
-        
-        teams.forEach((name, team) -> {
-            if (team == null) {
-                var newTeam = scoreboard.registerNewTeam(name);
-                newTeam.color(
-                    name.equals("highlife") ? NamedTextColor.GREEN :
-                        name.equals("midlife") ? NamedTextColor.YELLOW :
-                            name.equals("lowlife") ? NamedTextColor.RED :
-                                name.equals("spectator") ? NamedTextColor.GRAY : null);
-                teams.put(name, newTeam);
+        var teams = new Team[]{
+            scoreboard.getTeam("highlife"),
+            scoreboard.getTeam("midlife"),
+            scoreboard.getTeam("lowlife"),
+            scoreboard.getTeam("spectator")
+        };
+    
+        for (int i = 0; i < teams.length; i++) {
+            switch (i) {
+                case 0 -> {
+                    if (teams[i] == null) {
+                        var team = scoreboard.registerNewTeam("highlife");
+                        team.color(NamedTextColor.GREEN);
+                        teams[i] = team;
+                    }
+                }
+                case 1 -> {
+                    if (teams[i] == null) {
+                        var team = scoreboard.registerNewTeam("midlife");
+                        team.color(NamedTextColor.YELLOW);
+                        teams[i] = team;
+                    }
+                }
+                case 2 -> {
+                    if (teams[i] == null) {
+                        var team = scoreboard.registerNewTeam("lowlife");
+                        team.color(NamedTextColor.RED);
+                        teams[i] = team;
+                    }
+                }
+                case 3 -> {
+                    if (teams[i] == null) {
+                        var team = scoreboard.registerNewTeam("spectator");
+                        team.color(NamedTextColor.GRAY);
+                        teams[i] = team;
+                    }
+                }
             }
-        });
-        
-        if (scoreboard.getObjective("deaths") == null) {
-            scoreboard.registerNewObjective("deaths", "deathCount", Component.text("deaths"));
         }
         
-        plugin.getColorTeams().addAll(teams.values());
+        plugin.getColorTeams().addAll(List.of(teams));
     }
 }

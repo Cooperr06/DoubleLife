@@ -41,6 +41,11 @@ public class PlayerTeamManager {
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team"));
     }
     
+    public PlayerTeam getTeamOfTeamNumber(Integer teamNumber) {
+        return playerTeams.stream().filter(playerTeam -> playerTeam.getTeamNumber() == teamNumber)
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("No team found with number " + teamNumber));
+    }
+    
     public OfflinePlayer getOtherMemberOfPlayer(OfflinePlayer player) {
         return Arrays.stream(playerTeams.stream().filter(playerTeam -> playerTeam.contains(player))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team")).getPlayers())

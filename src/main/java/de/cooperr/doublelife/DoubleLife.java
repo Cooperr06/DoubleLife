@@ -49,7 +49,9 @@ public final class DoubleLife extends JavaPlugin {
     public void onDisable() {
         saveConfig();
         for (Player onlinePlayer : getServer().getOnlinePlayers()) {
-            getPlaytimeManager().stopPlayerTimer(getServer().getOfflinePlayer(onlinePlayer.getUniqueId()), false);
+            if (getPlayerTeamManager().getTeamOfPlayer(getServer().getOfflinePlayer(onlinePlayer.getUniqueId())).getLives() != 0) {
+                getPlaytimeManager().stopPlayerTimer(getServer().getOfflinePlayer(onlinePlayer.getUniqueId()), false);
+            }
         }
     }
     
@@ -73,6 +75,7 @@ public final class DoubleLife extends JavaPlugin {
     private void listenerRegistration() {
         new AsyncPlayerPreLoginListener(this);
         new EntityDamageListener(this);
+        new EntitySpawnListener(this);
         new PlayerCommandPreprocessListener(this);
         new PlayerDeathListener(this);
         new PlayerJoinListener(this);

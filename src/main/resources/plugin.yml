@@ -9,3 +9,6 @@ commands:
   time:
     description: Zeigt dir an, wie viel Zeit du noch hast, bevor du gekickt wirst
     usage: /time
+  life:
+    description: Nimmt und gibt Leben an Teams
+    usage: /life <action> <nummer>
