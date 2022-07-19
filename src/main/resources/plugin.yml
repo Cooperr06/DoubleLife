@@ -12,3 +12,6 @@ commands:
   life:
     description: Nimmt und gibt Leben an Teams
     usage: /life <action> <nummer>
+  reequip:
+    description: Rüstet das letzte Inventar eines Spielers vor seinem letzten Tod aus
+    usage: /reequip <target>

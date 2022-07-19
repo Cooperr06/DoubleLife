@@ -27,7 +27,7 @@ public class LifeCommand implements CommandExecutor {
         }
         
         if (args.length != 2) {
-            sender.sendMessage(Component.text("Benutze: /life <action> <nummer>"));
+            sender.sendMessage(Component.text("Benutze: /life <action> <nummer>", NamedTextColor.DARK_RED));
             return true;
         }
         
@@ -35,7 +35,7 @@ public class LifeCommand implements CommandExecutor {
         try {
             number = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(Component.text("Benutze: /life <action> <nummer>"));
+            sender.sendMessage(Component.text("Benutze: /life <action> <nummer>", NamedTextColor.DARK_RED));
             return true;
         }
         
@@ -82,7 +82,7 @@ public class LifeCommand implements CommandExecutor {
             }
             
             default -> {
-                sender.sendMessage(Component.text("Benutze: /life <action> <nummer>"));
+                sender.sendMessage(Component.text("Benutze: /life <action> <nummer>", NamedTextColor.DARK_RED));
                 return true;
             }
         }

@@ -1,5 +1,7 @@
 package de.cooperr.doublelife;
 
+import de.cooperr.doublelife.command.LifeCommand;
+import de.cooperr.doublelife.command.ReequipCommand;
 import de.cooperr.doublelife.command.TimeCommand;
 import de.cooperr.doublelife.listener.*;
 import de.cooperr.doublelife.util.*;
@@ -30,8 +32,9 @@ public final class DoubleLife extends JavaPlugin {
     
     private Config config;
     private Initializer initializer;
-    private PlaytimeManager playtimeManager;
     private PlayerTeamManager playerTeamManager;
+    private Base64Manager base64;
+    private PlaytimeManager playtimeManager;
     private LivesManager livesManager;
     
     @Setter
@@ -59,6 +62,7 @@ public final class DoubleLife extends JavaPlugin {
         config = new Config(this, "config.yml");
         initializer = new Initializer(this);
         playerTeamManager = new PlayerTeamManager(this);
+        base64 = new Base64Manager(this);
         initializer.init();
         
         var plugin = this;
@@ -83,6 +87,8 @@ public final class DoubleLife extends JavaPlugin {
     }
     
     private void commandRegistration() {
+        new LifeCommand(this);
+        new ReequipCommand(this);
         new TimeCommand(this);
     }
     
