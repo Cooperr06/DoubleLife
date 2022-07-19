@@ -68,51 +68,49 @@ public class Initializer {
         
         plugin.setCheckPlaytimeTask(plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             
-            var playerTimes = new ArrayList<Map<String, Object>>();
+            var playerTimes = new ArrayList<Map<OfflinePlayer, Integer>>();
             
-            for (var i = 1; i <= plugin.getTeamsSize(); i++) {
+            for (var onlinePlayer : plugin.getServer().getOnlinePlayers()) {
                 
-                var teamsSection = plugin.getConfig().getConfigurationSection("teams");
-                assert teamsSection != null;
-                var memberSection = teamsSection.getConfigurationSection("team" + i + ".members");
-                assert memberSection != null;
+                var map = new HashMap<OfflinePlayer, Integer>();
+                var playerOffline = plugin.getServer().getOfflinePlayer(onlinePlayer.getUniqueId());
+                var pathToPlayer = "teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(plugin.getServer()
+                    .getOfflinePlayer(onlinePlayer.getUniqueId())).getTeamNumber() + ".members." + onlinePlayer.getUniqueId();
                 
-                playerTimes.add(memberSection.getValues(false));
+                map.put(playerOffline, plugin.getConfig().getInt(pathToPlayer + ".time"));
+                
+                if (plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline).getTeamNumber() + ".lives") > 0) {
+                    playerTimes.add(map);
+                }
             }
             
             for (var playerTime : playerTimes) {
                 
-                playerTime.forEach((uuid, object) -> {
+                playerTime.forEach((offlinePlayer, currentTime) -> {
                     
-                    var currentTime = Integer.parseInt(String.valueOf(object));
-                    var offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
+                    var timer = plugin.getPlaytimeManager().getPlayerTimers().get(offlinePlayer);
                     
-                    if (offlinePlayer.isOnline() && plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(offlinePlayer).getTeamNumber() + ".lives") != 0) {
+                    feedback.putIfAbsent(offlinePlayer, 0);
+                    
+                    if (timer.getTime() + currentTime >= 60 * 60 * 2) {
                         
-                        var timer = plugin.getPlaytimeManager().getPlayerTimers().get(offlinePlayer);
+                        ((Player) offlinePlayer).kick(Component.text("Deine Zeit ist abgelaufen!", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+                        plugin.getConfig().set("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(offlinePlayer).getTeamNumber() +
+                            ".members." + offlinePlayer.getUniqueId(), timer.getTime() + currentTime);
+                        plugin.getPlaytimeManager().stopPlayerTimer(offlinePlayer, true);
                         
-                        feedback.putIfAbsent(offlinePlayer, 0);
+                        feedback.put(offlinePlayer, 0);
+                        return;
                         
-                        if (timer.getTime() + currentTime >= 60 * 60 * 2) {
-                            
-                            ((Player) offlinePlayer).kick(Component.text("Deine Zeit ist abgelaufen!", NamedTextColor.DARK_RED, TextDecoration.BOLD));
-                            plugin.getConfig().set("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(offlinePlayer).getTeamNumber() +
-                                ".members." + offlinePlayer.getUniqueId(), timer.getTime() + currentTime);
-                            plugin.getPlaytimeManager().stopPlayerTimer(offlinePlayer, true);
-                            
-                            feedback.put(offlinePlayer, 0);
-                            return;
-                            
-                        } else if ((feedback.get(offlinePlayer) + 1) % 30 == 0) {
-                            
-                            ((Player) offlinePlayer).sendMessage(Component.text("Du hast noch " + Timer.formatTime(60 * 60 * 2 - (timer.getTime() + currentTime)) +
-                                " übrig, bevor du gekickt wirst!", NamedTextColor.RED));
-                            
-                            feedback.put(offlinePlayer, 0);
-                            return;
-                        }
-                        feedback.put(offlinePlayer, feedback.get(offlinePlayer) + 1);
+                    } else if ((feedback.get(offlinePlayer) + 1) % 30 == 0) {
+                        
+                        ((Player) offlinePlayer).sendMessage(Component.text("Du hast noch " + Timer.formatTime(60 * 60 * 2 - (timer.getTime() + currentTime)) +
+                            " übrig, bevor du gekickt wirst!", NamedTextColor.RED));
+                        
+                        feedback.put(offlinePlayer, 0);
+                        return;
                     }
+                    feedback.put(offlinePlayer, feedback.get(offlinePlayer) + 1);
                 });
             }
         }, 20 * 30, 20 * 30));
@@ -128,7 +126,7 @@ public class Initializer {
             scoreboard.getTeam("lowlife"),
             scoreboard.getTeam("spectator")
         };
-    
+        
         for (int i = 0; i < teams.length; i++) {
             switch (i) {
                 case 0 -> {

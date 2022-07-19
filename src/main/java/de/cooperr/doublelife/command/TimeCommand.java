@@ -36,7 +36,7 @@ public class TimeCommand implements CommandExecutor {
         
         var playerOffline = plugin.getServer().getOfflinePlayer(player.getUniqueId());
         var configTime = plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline)
-            .getTeamNumber() + ".members." + player.getUniqueId());
+            .getTeamNumber() + ".members." + player.getUniqueId() + ".time");
         var timerTime = plugin.getPlaytimeManager().getPlayerTimers().get(playerOffline).getTime();
         var remainingTime = 60 * 60 * 2 - (timerTime + configTime);
         

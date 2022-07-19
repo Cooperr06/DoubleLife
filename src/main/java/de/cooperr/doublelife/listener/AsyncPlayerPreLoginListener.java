@@ -23,7 +23,7 @@ public class AsyncPlayerPreLoginListener implements Listener {
         var player = plugin.getServer().getOfflinePlayer(event.getUniqueId());
     
         if (plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(player) +
-            ".members." + player.getUniqueId()) >= 60 * 60 * 2) {
+            ".members." + player.getUniqueId() + ".time") >= 60 * 60 * 2) {
             event.disallow(
                 AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                 Component.text("Deine Zeit ist abgelaufen!", NamedTextColor.DARK_RED, TextDecoration.BOLD));

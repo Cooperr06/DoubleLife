@@ -41,7 +41,7 @@ public class LifeCommand implements CommandExecutor {
         
         var teamMember = plugin.getPlayerTeamManager().getTeamOfTeamNumber(number).getPlayers()[0];
         var otherTeamMember = plugin.getPlayerTeamManager().getTeamOfTeamNumber(number).getPlayers()[1];
-        var lives = plugin.getLivesManager().giveLife(teamMember);
+        plugin.getLivesManager().giveLife(teamMember);
         
         switch (args[0]) {
             

@@ -27,9 +27,9 @@ public class PlaytimeManager {
         var timer = playerTimers.get(player);
         var pathToMember = "teams.team" + plugin.getPlayerTeamManager()
             .getTeamOfPlayer(player).getTeamNumber() + ".members." + player.getUniqueId();
-        var currentTime = plugin.getConfig().getInt(pathToMember);
+        var currentTime = plugin.getConfig().getInt(pathToMember + ".time");
         
-        plugin.getConfig().set(pathToMember, reset ? 0 : currentTime + timer.getTime());
+        plugin.getConfig().set(pathToMember + ".time", reset ? 0 : currentTime + timer.getTime());
         plugin.saveConfig();
     
         timer.stop();

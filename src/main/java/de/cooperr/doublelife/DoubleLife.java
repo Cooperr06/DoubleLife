@@ -7,9 +7,9 @@ import de.cooperr.doublelife.listener.*;
 import de.cooperr.doublelife.util.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -46,12 +46,13 @@ public final class DoubleLife extends JavaPlugin {
         
         listenerRegistration();
         commandRegistration();
+        getServer().removeRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "enchanting_table"));
     }
     
     @Override
     public void onDisable() {
         saveConfig();
-        for (Player onlinePlayer : getServer().getOnlinePlayers()) {
+        for (var onlinePlayer : getServer().getOnlinePlayers()) {
             if (getPlayerTeamManager().getTeamOfPlayer(getServer().getOfflinePlayer(onlinePlayer.getUniqueId())).getLives() != 0) {
                 getPlaytimeManager().stopPlayerTimer(getServer().getOfflinePlayer(onlinePlayer.getUniqueId()), false);
             }

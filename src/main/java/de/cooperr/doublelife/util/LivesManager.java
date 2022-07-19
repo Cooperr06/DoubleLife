@@ -3,7 +3,6 @@ package de.cooperr.doublelife.util;
 import de.cooperr.doublelife.DoubleLife;
 import lombok.AllArgsConstructor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 @AllArgsConstructor
 public class LivesManager {
@@ -20,13 +19,11 @@ public class LivesManager {
         return team.getLives();
     }
     
-    public int giveLife(OfflinePlayer player) {
+    public void giveLife(OfflinePlayer player) {
         var team = plugin.getPlayerTeamManager().getTeamOfPlayer(player);
         team.setLives(team.getLives() + 1);
-    
+        
         plugin.getConfig().set("teams.team" + team.getTeamNumber() + ".lives", team.getLives());
         plugin.saveConfig();
-    
-        return team.getLives();
     }
 }
