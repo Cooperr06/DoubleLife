@@ -74,14 +74,13 @@ public class PlayerDeathListener implements Listener {
         }
         
         player.getWorld().strikeLightningEffect(player.getLocation());
+    
+        var pathToPlayer = "teams.team" + playerTeam.getTeamNumber() + ".members." + player.getUniqueId();
         
         if (!player.getInventory().isEmpty()) {
-            
-            var pathToPlayer = "teams.team" + playerTeam.getTeamNumber() + ".members." + player.getUniqueId();
-            
             plugin.getConfig().set(pathToPlayer + ".last-inventory", plugin.getBase64().write(player.getInventory().getContents()));
-            plugin.getConfig().set(pathToPlayer + ".last-exp", player.getLevel() + "/" + player.getExp());
-            plugin.saveConfig();
         }
+        plugin.getConfig().set(pathToPlayer + ".last-exp", player.getLevel() + "/" + player.getExp());
+        plugin.saveConfig();
     }
 }
