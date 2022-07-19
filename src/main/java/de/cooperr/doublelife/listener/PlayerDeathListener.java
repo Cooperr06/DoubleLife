@@ -25,7 +25,7 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         
         var player = event.getPlayer();
-        var otherMember = plugin.getPlayerTeamManager().getOtherMemberOfPlayer(player);
+        var otherMember = plugin.getPlayerTeamManager().getOtherMemberOfPlayer(plugin.getServer().getOfflinePlayer(player.getUniqueId()));
         var playerTeam = plugin.getPlayerTeamManager().getTeamOfPlayer(plugin.getServer().getOfflinePlayer(player.getUniqueId()));
         
         cooldown.putIfAbsent(playerTeam, 0);
@@ -37,7 +37,7 @@ public class PlayerDeathListener implements Listener {
         } else {
             
             if (otherMember.isOnline()) {
-                
+    
                 lives = plugin.getLivesManager().takeLife(plugin.getServer().getOfflinePlayer(player.getUniqueId()));
                 
                 var otherOnline = otherMember.getPlayer();
@@ -45,6 +45,9 @@ public class PlayerDeathListener implements Listener {
                 
                 cooldown.put(playerTeam, 1);
                 otherOnline.setHealth(0);
+                
+            } else {
+                lives = plugin.getLivesManager().takeLife(plugin.getServer().getOfflinePlayer(player.getUniqueId()));
             }
         }
         
@@ -77,7 +80,7 @@ public class PlayerDeathListener implements Listener {
             var pathToPlayer = "teams.team" + playerTeam.getTeamNumber() + ".members." + player.getUniqueId();
             
             plugin.getConfig().set(pathToPlayer + ".last-inventory", plugin.getBase64().write(player.getInventory().getContents()));
-            plugin.getConfig().set(pathToPlayer + ".last-exp", player.getTotalExperience());
+            plugin.getConfig().set(pathToPlayer + ".last-exp", player.getLevel() + "/" + player.getExp());
             plugin.saveConfig();
         }
     }

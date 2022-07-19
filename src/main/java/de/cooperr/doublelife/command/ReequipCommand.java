@@ -40,9 +40,14 @@ public class ReequipCommand implements CommandExecutor {
         
         var pathToPlayer = "teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(plugin.getServer()
             .getOfflinePlayer(player.getUniqueId())).getTeamNumber() + ".members." + player.getUniqueId();
+        var lastExp = plugin.getConfig().getString(pathToPlayer + ".last-exp");
+        assert lastExp != null;
+        
+        var experienceSplit = lastExp.split("/");
         
         player.getInventory().setContents(plugin.getBase64().read(plugin.getConfig().getString(pathToPlayer + ".last-inventory")));
-        player.setTotalExperience(plugin.getConfig().getInt(pathToPlayer + ".last-exp"));
+        player.setLevel(Integer.parseInt(experienceSplit[0]));
+        player.setExp(Float.parseFloat(experienceSplit[1]));
         
         plugin.getServer().broadcast(player.displayName().append(Component.text("'s letztes Inventar wurde wiederhergestellt!", NamedTextColor.GOLD, TextDecoration.BOLD)));
         return true;
