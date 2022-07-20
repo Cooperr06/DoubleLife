@@ -37,7 +37,7 @@ public class PlayerDeathListener implements Listener {
         } else {
             
             if (otherMember.isOnline()) {
-    
+                
                 lives = plugin.getLivesManager().takeLife(plugin.getServer().getOfflinePlayer(player.getUniqueId()));
                 
                 var otherOnline = otherMember.getPlayer();
@@ -74,7 +74,7 @@ public class PlayerDeathListener implements Listener {
         }
         
         player.getWorld().strikeLightningEffect(player.getLocation());
-    
+        
         var pathToPlayer = "teams.team" + playerTeam.getTeamNumber() + ".members." + player.getUniqueId();
         
         if (!player.getInventory().isEmpty()) {

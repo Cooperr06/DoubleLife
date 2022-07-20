@@ -31,7 +31,7 @@ public class PlaytimeManager {
         
         plugin.getConfig().set(pathToMember + ".time", reset ? 0 : currentTime + timer.getTime());
         plugin.saveConfig();
-    
+        
         timer.stop();
     }
 }

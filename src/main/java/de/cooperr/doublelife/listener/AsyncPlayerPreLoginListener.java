@@ -21,7 +21,7 @@ public class AsyncPlayerPreLoginListener implements Listener {
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         
         var player = plugin.getServer().getOfflinePlayer(event.getUniqueId());
-    
+        
         if (plugin.getConfig().getInt("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(player) +
             ".members." + player.getUniqueId() + ".time") >= 60 * 60 * 2) {
             event.disallow(

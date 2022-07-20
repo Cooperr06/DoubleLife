@@ -26,7 +26,7 @@ public class Timer {
         var seconds = time;
         var minutes = 0;
         var hours = 0;
-    
+        
         while (seconds >= 60) {
             minutes++;
             seconds -= 60;
@@ -35,7 +35,7 @@ public class Timer {
             hours++;
             minutes -= 60;
         }
-    
+        
         return (hours == 0 && minutes != 0 ? "" : hours + "h") + " " +
             (minutes == 0 && seconds != 0 ? "" : minutes + "m") + " " +
             seconds + "s";

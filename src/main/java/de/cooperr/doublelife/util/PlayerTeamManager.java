@@ -20,12 +20,12 @@ public class PlayerTeamManager {
     }
     
     private void init() {
-    
+        
         var teamsSection = plugin.getConfig().getConfigurationSection("teams");
         assert teamsSection != null;
-    
+        
         plugin.setTeamsSize(teamsSection.getKeys(false).size());
-    
+        
         for (var i = 1; i <= plugin.getTeamsSize(); i++) {
             
             var teamSection = teamsSection.getConfigurationSection("team" + i);
@@ -48,7 +48,7 @@ public class PlayerTeamManager {
     
     public OfflinePlayer getOtherMemberOfPlayer(OfflinePlayer player) {
         return Arrays.stream(playerTeams.stream().filter(playerTeam -> playerTeam.contains(player))
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team")).getPlayers())
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Player not in any team")).getPlayers())
             .filter(teamMember -> !teamMember.getUniqueId().equals(player.getUniqueId()))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("No other team member found"));
     }

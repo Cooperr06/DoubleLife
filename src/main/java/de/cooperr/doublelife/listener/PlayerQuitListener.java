@@ -23,9 +23,9 @@ public class PlayerQuitListener implements Listener {
         if (plugin.getPlayerTeamManager().getTeamOfPlayer(playerOffline).getLives() == 0) {
             return;
         }
-    
+        
         plugin.getPlaytimeManager().stopPlayerTimer(playerOffline, false);
-    
+        
         if (plugin.getServer().getOnlinePlayers().size() == 1) {
             plugin.getCheckPlaytimeTask().cancel();
         }

@@ -78,7 +78,9 @@ public final class DoubleLife extends JavaPlugin {
     }
     
     private void listenerRegistration() {
+        new AsyncChatListener(this);
         new AsyncPlayerPreLoginListener(this);
+        new BlockBreakListener(this);
         new EntityDamageListener(this);
         new EntitySpawnListener(this);
         new PlayerCommandPreprocessListener(this);

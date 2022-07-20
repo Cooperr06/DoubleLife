@@ -45,6 +45,8 @@ public class Initializer {
         
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             
+            plugin.getServer().getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.kick(Component.text("Playtime Reset")));
+            
             for (var i = 1; i <= plugin.getTeamsSize(); i++) {
                 
                 var memberSection = plugin.getConfig().getConfigurationSection("teams.team" + i + ".members");
