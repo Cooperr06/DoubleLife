@@ -41,7 +41,6 @@ public class LifeCommand implements CommandExecutor {
         
         var teamMember = plugin.getPlayerTeamManager().getTeamOfTeamNumber(number).getPlayers()[0];
         var otherTeamMember = plugin.getPlayerTeamManager().getTeamOfTeamNumber(number).getPlayers()[1];
-        plugin.getLivesManager().giveLife(teamMember);
         
         switch (args[0]) {
             
@@ -52,6 +51,7 @@ public class LifeCommand implements CommandExecutor {
                     var team = plugin.getColorTeams().get(i);
                     
                     if (team.hasPlayer(teamMember) && !team.getName().equals("highlife")) {
+                        plugin.getLivesManager().giveLife(teamMember);
                         plugin.getColorTeams().get(i - 1).addPlayer(teamMember);
                         plugin.getColorTeams().get(i - 1).addPlayer(otherTeamMember);
                         break;
@@ -70,6 +70,7 @@ public class LifeCommand implements CommandExecutor {
                     var team = plugin.getColorTeams().get(i);
                     
                     if (team.hasPlayer(teamMember) && !team.getName().equals("spectator")) {
+                        plugin.getLivesManager().takeLife(teamMember);
                         plugin.getColorTeams().get(i + 1).addPlayer(teamMember);
                         plugin.getColorTeams().get(i + 1).addPlayer(otherTeamMember);
                         break;
