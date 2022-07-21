@@ -39,9 +39,9 @@ public class Initializer {
     
     private void startDailyTask() {
         
-        var desiredDate = Date.from(LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.ofHours(2)));
+        var desiredDate = LocalDate.now().plusDays(1).atStartOfDay().toEpochSecond(ZoneOffset.ofHours(2)) * 1000;
         var now = new Date();
-        var delay = desiredDate.getTime() - now.getTime();
+        var delay = desiredDate - now.getTime();
         
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             
@@ -97,9 +97,7 @@ public class Initializer {
                     if (timer.getTime() + currentTime >= 60 * 60 * 2) {
                         
                         ((Player) offlinePlayer).kick(Component.text("Deine Zeit ist abgelaufen!", NamedTextColor.DARK_RED, TextDecoration.BOLD));
-                        plugin.getConfig().set("teams.team" + plugin.getPlayerTeamManager().getTeamOfPlayer(offlinePlayer).getTeamNumber() +
-                            ".members." + offlinePlayer.getUniqueId(), timer.getTime() + currentTime);
-                        plugin.getPlaytimeManager().stopPlayerTimer(offlinePlayer, true);
+                        plugin.getPlaytimeManager().stopPlayerTimer(offlinePlayer, false);
                         
                         feedback.put(offlinePlayer, 0);
                         return;
